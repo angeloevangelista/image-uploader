@@ -2,16 +2,10 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
-  max-width: 500px;
-  padding: 40px;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
-
-  background-color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  justify-content: center;
 `;
 
 export const Header = styled.header`
@@ -34,7 +28,7 @@ export const Header = styled.header`
 `;
 
 export const UploadContainer = styled.div`
-  width: 100%;
+  width: 400px;
 
   display: flex;
   flex-direction: column;

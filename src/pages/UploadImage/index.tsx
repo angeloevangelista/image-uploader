@@ -4,9 +4,10 @@ import DragAndDrop from '../../components/DragAndDrop';
 import Button, { EButtonTheme } from '../../components/Button';
 
 import * as SC from './styles';
+import ContentBox from '../../components/ContentBox';
 
-const SelectImage: React.FC = () => {
-  const inputReference = useRef<HTMLInputElement | null>(null);
+const UploadImage: React.FC = () => {
+  const fileInputReference = useRef<HTMLInputElement | null>(null);
 
   const handleUploadFile = useCallback((files: FileList) => {
     if (files.length !== 1) {
@@ -24,12 +25,12 @@ const SelectImage: React.FC = () => {
   }, []);
 
   const handleInputFileChange = useCallback(() => {
-    if (!inputReference || !inputReference.current) return;
+    if (!fileInputReference || !fileInputReference.current) return;
 
-    const files = inputReference.current.files;
+    const files = fileInputReference.current.files;
 
     files && handleUploadFile(files);
-  }, [inputReference, handleUploadFile]);
+  }, [fileInputReference, handleUploadFile]);
 
   const handleFileDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
@@ -46,34 +47,39 @@ const SelectImage: React.FC = () => {
     (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       event.preventDefault();
 
-      if (!inputReference) return;
+      if (!fileInputReference) return;
 
-      inputReference.current?.click();
+      fileInputReference.current?.click();
     },
-    [inputReference],
+    [fileInputReference],
   );
 
   return (
     <>
       <SC.Container>
-        <SC.Header>
-          <strong>Upload your image</strong>
-          <span>File should be Jpeg, Png...</span>
-        </SC.Header>
+        <ContentBox>
+          <SC.Header>
+            <strong>Upload your image</strong>
+            <span>File should be Jpeg, Png...</span>
+          </SC.Header>
 
-        <SC.UploadContainer>
-          <DragAndDrop onDrop={handleFileDrop} />
+          <SC.UploadContainer>
+            <DragAndDrop onDrop={handleFileDrop} />
 
-          <span>Or</span>
+            <span>Or</span>
 
-          <Button onClick={handleChooseFileClick} theme={EButtonTheme.primary}>
-            Choose a file
-          </Button>
-        </SC.UploadContainer>
+            <Button
+              onClick={handleChooseFileClick}
+              theme={EButtonTheme.primary}
+            >
+              Choose a file
+            </Button>
+          </SC.UploadContainer>
+        </ContentBox>
       </SC.Container>
 
       <input
-        ref={inputReference}
+        ref={fileInputReference}
         type="file"
         style={{ display: 'none' }}
         onChange={handleInputFileChange}
@@ -82,4 +88,4 @@ const SelectImage: React.FC = () => {
   );
 };
 
-export default SelectImage;
+export default UploadImage;
