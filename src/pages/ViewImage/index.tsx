@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { MdCheckCircle } from 'react-icons/md';
 
 import * as SC from './styles';
@@ -6,8 +6,11 @@ import * as SC from './styles';
 import Input from '../../components/Input';
 import ContentBox from '../../components/ContentBox';
 import { EButtonTheme } from '../../components/Button';
+import { useHistory } from 'react-router';
 
 const ViewImage: React.FC = () => {
+  const history = useHistory();
+  const [imageUrl, setImageUrl] = useState('');
   const linkInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleCopyImageLink = useCallback(() => {
@@ -15,6 +18,16 @@ const ViewImage: React.FC = () => {
 
     document.execCommand('copy');
   }, [linkInputRef]);
+
+  useEffect(() => {
+    const storedImageUrl = localStorage.getItem(
+      'image_uploader_image',
+    ) as string;
+
+    if (!storedImageUrl) return history.push('/');
+
+    setImageUrl(storedImageUrl);
+  }, [history]);
 
   return (
     <SC.Container>
@@ -25,23 +38,22 @@ const ViewImage: React.FC = () => {
         </SC.Header>
 
         <SC.ImageContainer>
-          <img
-            src="https://preview.redd.it/tk46u5nrkxm21.png?width=960&crop=smart&auto=webp&s=6af534c79eb6ee406e505de7c4a3bba5461cfee6"
-            alt="Uploaded"
-          />
+          <img src={imageUrl} alt="Uploaded" />
         </SC.ImageContainer>
 
         <Input
           ref={linkInputRef}
+          // value={imageUrl}
           value={
-            'https://preview.redd.it/tk46u5nrkxm21.png?width=960&crop=smart&auto=webp&s=6af534c79eb6ee406e505de7c4a3bba5461cfee6'
+            'Unfortunately, this is just a preview. But we will provide real uploads soon 😃'
           }
           readOnly
           useButton
           buttonProps={{
-            buttonText: 'Copy Link',
-            buttonTheme: EButtonTheme.primary,
-            onButtonClick: handleCopyImageLink,
+            children: 'Copy Link',
+            theme: EButtonTheme.primary,
+            onClick: handleCopyImageLink,
+            disabled: true,
           }}
         ></Input>
       </ContentBox>

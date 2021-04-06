@@ -6,25 +6,37 @@ import Button, { EButtonTheme } from '../../components/Button';
 
 import * as SC from './styles';
 import Loading from '../../components/Loading';
+import toDataUrl from '../../util/toDataUrl';
+import { useHistory } from 'react-router';
 
 const UploadImage: React.FC = () => {
+  const history = useHistory();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputReference = useRef<HTMLInputElement | null>(null);
 
-  const handleUploadFile = useCallback((files: FileList) => {
-    if (files.length !== 1) {
-      alert('Please, choose only one file');
-      return;
-    }
+  const handleUploadFile = useCallback(
+    async (files: FileList) => {
+      if (files.length !== 1) {
+        alert('Please, choose only one file');
+        return;
+      }
 
-    const [file] = Array.from(files).filter((f) => {
-      const [category] = f.type.split('/');
+      const [file] = Array.from(files).filter((f) => {
+        const [category] = f.type.split('/');
 
-      return category.toUpperCase() === 'IMAGE';
-    });
+        return category.toUpperCase() === 'IMAGE';
+      });
 
-    setIsUploading(true);
-  }, []);
+      setIsUploading(true);
+
+      const fileUrl = await toDataUrl(file);
+
+      localStorage.setItem('image_uploader_image', String(fileUrl));
+
+      history.push(`/view`);
+    },
+    [history],
+  );
 
   const handleInputFileChange = useCallback(() => {
     if (!fileInputReference || !fileInputReference.current) return;

@@ -1,14 +1,8 @@
 import React from 'react';
 
-import Button, { EButtonTheme } from '../Button';
+import Button, { IButtonProps } from '../Button';
 
 import * as SC from './styles';
-
-interface IButtonProps {
-  buttonTheme: EButtonTheme;
-  onButtonClick?: React.MouseEventHandler<HTMLButtonElement>;
-  buttonText: string;
-}
 
 export interface IInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -27,12 +21,7 @@ const Input: InputType = React.forwardRef(
         <input ref={forwardReference} {...restProps} />
 
         {useButton && buttonProps && (
-          <Button
-            onClick={buttonProps.onButtonClick}
-            theme={buttonProps.buttonTheme}
-          >
-            {buttonProps.buttonText}
-          </Button>
+          <Button {...buttonProps}>{buttonProps.children}</Button>
         )}
       </SC.Container>
     );
