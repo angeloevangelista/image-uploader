@@ -1,12 +1,14 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
+import ContentBox from '../../components/ContentBox';
 import DragAndDrop from '../../components/DragAndDrop';
 import Button, { EButtonTheme } from '../../components/Button';
 
 import * as SC from './styles';
-import ContentBox from '../../components/ContentBox';
+import Loading from '../../components/Loading';
 
 const UploadImage: React.FC = () => {
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputReference = useRef<HTMLInputElement | null>(null);
 
   const handleUploadFile = useCallback((files: FileList) => {
@@ -21,7 +23,7 @@ const UploadImage: React.FC = () => {
       return category.toUpperCase() === 'IMAGE';
     });
 
-    console.log(file);
+    setIsUploading(true);
   }, []);
 
   const handleInputFileChange = useCallback(() => {
@@ -55,28 +57,32 @@ const UploadImage: React.FC = () => {
   );
 
   return (
-    <>
-      <SC.Container>
-        <ContentBox>
-          <SC.Header>
-            <strong>Upload your image</strong>
-            <span>File should be Jpeg, Png...</span>
-          </SC.Header>
+    <SC.Container>
+      <ContentBox>
+        {isUploading ? (
+          <Loading text="Uploading..." />
+        ) : (
+          <>
+            <SC.Header>
+              <strong>Upload your image</strong>
+              <span>File should be Jpeg, Png...</span>
+            </SC.Header>
 
-          <SC.UploadContainer>
-            <DragAndDrop onDrop={handleFileDrop} />
+            <SC.UploadContainer>
+              <DragAndDrop onDrop={handleFileDrop} />
 
-            <span>Or</span>
+              <span>Or</span>
 
-            <Button
-              onClick={handleChooseFileClick}
-              theme={EButtonTheme.primary}
-            >
-              Choose a file
-            </Button>
-          </SC.UploadContainer>
-        </ContentBox>
-      </SC.Container>
+              <Button
+                onClick={handleChooseFileClick}
+                theme={EButtonTheme.primary}
+              >
+                Choose a file
+              </Button>
+            </SC.UploadContainer>
+          </>
+        )}
+      </ContentBox>
 
       <input
         ref={fileInputReference}
@@ -84,7 +90,7 @@ const UploadImage: React.FC = () => {
         style={{ display: 'none' }}
         onChange={handleInputFileChange}
       />
-    </>
+    </SC.Container>
   );
 };
 

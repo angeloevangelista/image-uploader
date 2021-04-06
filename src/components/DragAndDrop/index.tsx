@@ -1,6 +1,6 @@
 import React, { DragEventHandler, HTMLAttributes, useCallback } from 'react';
 
-import uploadBgImg from '../../assets/upload-bg.png';
+import uploadBgImg from '../../assets/upload-bg.svg';
 
 import * as SC from './styles';
 
