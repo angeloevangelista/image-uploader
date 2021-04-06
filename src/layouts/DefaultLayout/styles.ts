@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const WrapperContainer = styled.div`
+  padding: 10px;
+
   width: 100%;
   height: 100%;
 

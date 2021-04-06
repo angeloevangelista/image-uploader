@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router';
 import React, { useCallback, useRef, useState } from 'react';
 
 import ContentBox from '../../components/ContentBox';
@@ -5,9 +7,9 @@ import DragAndDrop from '../../components/DragAndDrop';
 import Button, { EButtonTheme } from '../../components/Button';
 
 import * as SC from './styles';
-import Loading from '../../components/Loading';
+
 import toDataUrl from '../../util/toDataUrl';
-import { useHistory } from 'react-router';
+import Loading from '../../components/Loading';
 
 const UploadImage: React.FC = () => {
   const history = useHistory();
@@ -16,9 +18,8 @@ const UploadImage: React.FC = () => {
 
   const handleUploadFile = useCallback(
     async (files: FileList) => {
-      if (files.length !== 1) {
-        alert('Please, choose only one file');
-        return;
+      if (files.length > 1) {
+        return toast.warning('Please, choose only one file 😗');
       }
 
       const [file] = Array.from(files).filter((f) => {
@@ -26,6 +27,10 @@ const UploadImage: React.FC = () => {
 
         return category.toUpperCase() === 'IMAGE';
       });
+
+      if (!file) {
+        return toast.error('I am not sure about this picture 🧐');
+      }
 
       setIsUploading(true);
 

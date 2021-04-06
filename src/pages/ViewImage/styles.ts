@@ -1,11 +1,22 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  position: relative;
+
   width: 100%;
 
   display: flex;
-  align-self: center;
+  align-items: center;
   justify-content: center;
+
+  > a {
+    position: absolute;
+
+    top: 40px;
+    left: 40px;
+
+    text-decoration: none;
+  }
 `;
 
 export const Header = styled.header`
@@ -18,19 +29,21 @@ export const Header = styled.header`
   }
 
   strong {
-    margin: 10px 0;
+    margin: 4px 0;
     font-size: 24px;
   }
 `;
 
 export const ImageContainer = styled.div`
+  display: flex;
+
   width: 100%;
   max-width: 400px;
 
   overflow: hidden;
   border-radius: 20px;
 
-  margin: 20px 0;
+  margin: 12px 0;
 
   img {
     width: 100%;

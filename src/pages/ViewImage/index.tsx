@@ -1,12 +1,14 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MdCheckCircle } from 'react-icons/md';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import * as SC from './styles';
 
 import Input from '../../components/Input';
 import ContentBox from '../../components/ContentBox';
-import { EButtonTheme } from '../../components/Button';
 import { useHistory } from 'react-router';
+import Button, { EButtonTheme } from '../../components/Button';
+import { toast } from 'react-toastify';
 
 const ViewImage: React.FC = () => {
   const history = useHistory();
@@ -24,13 +26,20 @@ const ViewImage: React.FC = () => {
       'image_uploader_image',
     ) as string;
 
-    if (!storedImageUrl) return history.push('/');
+    if (!storedImageUrl) {
+      toast.info('It seems you have not uploaded any picture yet 😜');
+      return history.push('/');
+    }
 
     setImageUrl(storedImageUrl);
   }, [history]);
 
   return (
     <SC.Container>
+      <Link to="/">
+        <Button theme={EButtonTheme.secondary}>Voltar</Button>
+      </Link>
+
       <ContentBox>
         <SC.Header>
           <MdCheckCircle size={32} />
