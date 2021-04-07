@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import React, { useCallback, useRef, useState } from 'react';
@@ -8,8 +9,11 @@ import Button, { EButtonTheme } from '../../components/Button';
 
 import * as SC from './styles';
 
-import toDataUrl from '../../util/toDataUrl';
 import Loading from '../../components/Loading';
+
+interface IImage {
+  id: string;
+}
 
 const UploadImage: React.FC = () => {
   const history = useHistory();
@@ -34,11 +38,23 @@ const UploadImage: React.FC = () => {
 
       setIsUploading(true);
 
-      const fileUrl = await toDataUrl(file);
+      const formData = new FormData();
+      formData.append('image', file);
 
-      localStorage.setItem('image_uploader_image', String(fileUrl));
+      try {
+        const response = await axios.post<IImage>(
+          `${String(process.env.REACT_APP_API_HOST)}/api/upload`,
+          formData,
+        );
 
-      history.push(`/view`);
+        history.push(`/view/${response.data.id}`);
+      } catch (error) {
+        toast.error(
+          "Ooops, something happened and we couldn't save your picture 🤕",
+        );
+
+        setIsUploading(false);
+      }
     },
     [history],
   );

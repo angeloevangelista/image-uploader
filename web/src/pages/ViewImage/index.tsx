@@ -6,11 +6,11 @@ import * as SC from './styles';
 
 import Input from '../../components/Input';
 import ContentBox from '../../components/ContentBox';
-import { useHistory } from 'react-router';
+import { useHistory, useRouteMatch } from 'react-router';
 import Button, { EButtonTheme } from '../../components/Button';
-import { toast } from 'react-toastify';
 
 const ViewImage: React.FC = () => {
+  const { params } = useRouteMatch<{ image_id: string }>();
   const history = useHistory();
   const [imageUrl, setImageUrl] = useState('');
   const linkInputRef = useRef<HTMLInputElement | null>(null);
@@ -22,17 +22,12 @@ const ViewImage: React.FC = () => {
   }, [linkInputRef]);
 
   useEffect(() => {
-    const storedImageUrl = localStorage.getItem(
-      'image_uploader_image',
-    ) as string;
+    const { image_id } = params;
 
-    if (!storedImageUrl) {
-      toast.info('It seems you have not uploaded any picture yet 😜');
-      return history.push('/');
-    }
-
-    setImageUrl(storedImageUrl);
-  }, [history]);
+    setImageUrl(
+      `${String(process.env.REACT_APP_API_HOST)}/api/images/${image_id}`,
+    );
+  }, [history, params]);
 
   return (
     <SC.Container>
@@ -52,17 +47,13 @@ const ViewImage: React.FC = () => {
 
         <Input
           ref={linkInputRef}
-          // value={imageUrl}
-          value={
-            'Unfortunately, this is just a preview. But we will provide real uploads soon 😃'
-          }
+          value={imageUrl}
           readOnly
           useButton
           buttonProps={{
             children: 'Copy Link',
             theme: EButtonTheme.primary,
             onClick: handleCopyImageLink,
-            disabled: true,
           }}
         ></Input>
       </ContentBox>
